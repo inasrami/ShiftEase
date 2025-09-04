@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ShiftEase</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <h1>ShiftEase</h1>
+    <p>Your Ultimate Shift Generator Solution</p>
+
+    <div class="container">
+        
+        <div class="form-section">
+            <h2>Workers</h2>
+            <input type="text" id="workerName" placeholder="Enter worker name">
+            <button onclick="addWorker()">Add Worker</button>
+            <ul id="workerList"></ul>
+        </div>
+
+        <div class="form-section">
+            <h2>Shifts</h2>
+            <label for="shift">Number of shifts:</label>
+            <select id="shift" onchange="renderShifts()">
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+                <option value="4">4</option>
+            </select>
+            <div id="shiftsContainer"></div>
+        </div>
+
+        <button onclick="generateSchedule()">Generate Schedule</button>
+
+        <div id="scheduleOutput"></div>
+            
+    </div>
+</body>
+<script src="ShiftEase.js"></script>
+</html>
