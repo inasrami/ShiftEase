@@ -19,8 +19,10 @@
             <ul id="workerList"></ul>
         </div>
 
-        <div class="form-section">
-            <h2>Shifts</h2>
+       
+
+        <div class="form-section1">
+            <!-- <h2>Shifts</h2></br> -->
             <label for="shift">Number of shifts:</label>
             <select id="shift" onchange="renderShifts()">
                 <option value="1">1</option>
@@ -30,8 +32,11 @@
             </select>
             <div id="shiftsContainer"></div>
         </div>
-
-        <button onclick="generateSchedule()">Generate Schedule</button>
+        <div id="monthSection">
+            <label for="monthPicker">Select Month:</label>
+            <input type="month" id="monthPicker">
+        </div>
+        <button id="generateBtn" onclick="generateSchedule()">Generate Schedule</button>
 
         <div id="scheduleOutput"></div>
             

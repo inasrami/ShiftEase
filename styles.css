@@ -6,6 +6,7 @@ body{
 }
 h1{
     text-align: center;
+    text-justify: center;
     color: #333;
 }
 p{
@@ -21,33 +22,133 @@ p{
     padding: 5px;
     border-radius: 15px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    display: grid;
+    
 }
 .form-section{
     margin-bottom: 20px;
-    margin-left: 15px;
+    display: grid;
+    
 }
-button{
+.form-section h2{
+    text-align: center;
+    color: #333;
+}
+.form-section input{
+    width: 25%;
+    padding: 10px;
+    margin-top: 5px;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    font-size: 16px;
     display: block;
+    margin-left: auto;
+    margin-right: auto;
+}
+.form-section1 {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+label[for="shift"],
+#shift {
+    display: inline-block;
+    margin-right: 10px;
+}
+.shift-row {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    margin-bottom: 20px;
+    width: 80%;
+    
+}
+
+.shift-row h4 {
+    width: 80px;
+    margin: auto;
+    text-align: center;
+}
+
+.shift-row label {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    white-space: nowrap;
+}
+
+.shift-row input {
+    padding: 5px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    width: auto;
+}
+
+button{
+    display: absolute;
+    bottom: 10px;
+    right: 10px;
     width: 20%;
     padding: 10px;
     margin-top: 10px;
+    margin-left: auto;
+    margin-right: auto;
     background-color: #84bdfa;
     color: white;
     border: none;
     border-radius: 5px;
     cursor: pointer;
     font-size: 16px;
+    align-items: center;
+}
+#generateBtn{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-left: auto;
+    margin-right: auto;
+    width: 60%;
+    background-color: #1a73e8;
+    margin-bottom: 10px;
+}
+#generateBtn:hover{
+    background-color: #1669c1;
 }
 button:hover{
     background-color: #3399ff;
 }
 input{
     width: 20%;
-    padding: 8px;
+    padding: 10px;
     margin-top: 5px;
     border: 1px solid #ccc;
-    border-radius: 4px;
+    border-radius: 10px;
     font-size: 16px;
+}
+select{
+    width: 5%;
+    padding: 10px;
+    margin-top: 5px;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    font-size: 16px;
+}
+#workerList{
+    max-height: 200px;
+    width: 65%;
+    justify-content: center;
+    align-items: center;
+    margin-left: auto;
+    margin-right: auto;
+    overflow-y: auto;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    padding: 10px;
+    background-color: #fafafa;
 }
 #removeButton{
     background-color: hsl(0, 100%, 70%);
@@ -74,4 +175,17 @@ li{
     padding: 5px;
     border-bottom: 1px solid #ccc;
 }
-
+#monthSection{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+.scheduleOutput{
+    width: 100px;
+    border-collapse: collapse;
+    margin-top: 20px;
+    max-width: 70%;
+    overflow-x: auto;
+}
