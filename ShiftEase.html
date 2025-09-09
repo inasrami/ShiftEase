@@ -3,44 +3,106 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ShiftEase</title>
+    <title>ShiftEase - Ultimate Shift Generator</title>
     <link rel="stylesheet" href="styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 </head>
 <body>
-    <h1>ShiftEase</h1>
-    <p>Your Ultimate Shift Generator Solution</p>
-
-    <div class="container">
-        
-        <div class="form-section">
-            <h2>Workers</h2>
-            <input type="text" id="workerName" placeholder="Enter worker name">
-            <button onclick="addWorker()">Add Worker</button>
-            <ul id="workerList"></ul>
-        </div>
-
-       
-
-        <div class="form-section1">
-            <!-- <h2>Shifts</h2></br> -->
-            <label for="shift">Number of shifts:</label>
-            <select id="shift" onchange="renderShifts()">
-                <option value="1">1</option>
-                <option value="2">2</option>
-                <option value="3">3</option>
-                <option value="4">4</option>
-            </select>
-            <div id="shiftsContainer"></div>
-        </div>
-        <div id="monthSection">
-            <label for="monthPicker">Select Month:</label>
-            <input type="month" id="monthPicker">
-        </div>
-        <button id="generateBtn" onclick="generateSchedule()">Generate Schedule</button>
-
-        <div id="scheduleOutput"></div>
-            
+    <!-- Header Section -->
+    <div class="header">
+        <h1>ShiftEase</h1>
+        <p class="subtitle">Your Ultimate Shift Generator Solution</p>
     </div>
+
+    <!-- Main Container -->
+    <div class="container">
+        <!-- Workers and Shifts Configuration -->
+        <div class="card-grid">
+            <!-- Workers Section -->
+            <div class="card">
+                <div class="card-header">
+                    <h2 class="card-title">
+                        <svg class="icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197m13.5-9a2.5 2.5 0 11-5 0 2.5 2.5 0 015 0z"></path>
+                        </svg>
+                        Team Members
+                    </h2>
+                    <p class="card-description">Add and manage your team members who will be assigned to shifts</p>
+                </div>
+                
+                <div class="form-group">
+                    <div class="form-row">
+                        <div style="flex: 1;">
+                            <label for="workerName">Worker Name</label>
+                            <input type="text" id="workerName" placeholder="Enter worker name">
+                        </div>
+                        <button class="btn btn-primary" onclick="addWorker()">
+                            <svg width="16" height="16" fill="currentColor" viewBox="0 0 24 24">
+                                <path d="M12 5v14m-7-7h14"></path>
+                            </svg>
+                            Add Worker
+                        </button>
+                    </div>
+                </div>
+
+                <div class="worker-list" id="workerList"></div>
+            </div>
+
+            <!-- Shifts Configuration Section -->
+            <div class="card">
+                <div class="card-header">
+                    <h2 class="card-title">
+                        <svg class="icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                        </svg>
+                        Shift Configuration
+                    </h2>
+                    <p class="card-description">Configure the number of shifts and their details</p>
+                </div>
+
+                <div class="shift-selector">
+                    <label for="shift">Number of shifts:</label>
+                    <select id="shift" onchange="renderShifts()">
+                        <option value="1">1 Shift</option>
+                        <option value="2">2 Shifts</option>
+                        <option value="3">3 Shifts</option>
+                        <option value="4">4 Shifts</option>
+                    </select>
+                </div>
+
+                <div class="shifts-container" id="shiftsContainer"></div>
+            </div>
+        </div>
+
+        <!-- Schedule Generation Section -->
+        <div class="card-full">
+            <div class="card-header">
+                <h2 class="card-title">
+                    <svg class="icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+                    </svg>
+                    Generate Schedule
+                </h2>
+                <p class="card-description">Select the month and generate your optimized shift schedule</p>
+            </div>
+
+            <div class="month-section">
+                <label for="monthPicker">Select Month:</label>
+                <input type="month" id="monthPicker">
+            </div>
+
+            <button class="btn btn-primary btn-generate" id="generateBtn" onclick="generateSchedule()">
+                <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24">
+                    <path d="M13 10V3L4 14h7v7l9-11h-7z"></path>
+                </svg>
+                Generate Schedule
+            </button>
+
+            <div class="schedule-output" id="scheduleOutput"></div>
+        </div>
+    </div>
+
+    <script src="ShiftEase.js"></script>
 </body>
-<script src="ShiftEase.js"></script>
 </html>
