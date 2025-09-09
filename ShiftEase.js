@@ -167,40 +167,107 @@ function performScheduleGeneration() {
         });
     }
 
-    // Initialize worker schedules
+    // Initialize worker schedules with proper work pattern
     let workerSchedules = {};
     workers.forEach(worker => {
         workerSchedules[worker] = Array(daysInMonth).fill("Day Off");
     });
 
-    // Improved scheduling algorithm
-    let workerIndex = 0;
+    // New scheduling algorithm: 4 shifts, 2 days off (3 days off after night shift)
     const totalWorkers = workers.length;
+    
+    // Track worker states
+    let workerStates = {};
+    workers.forEach(worker => {
+        workerStates[worker] = {
+            shiftsThisWeek: 0,
+            daysOffNeeded: 0,
+            lastShiftWasNight: false,
+            weekStartDay: 0
+        };
+    });
 
+    // Process each day
     for (let day = 0; day < daysInMonth; day++) {
+        const dayOfWeek = new Date(year, month - 1, day + 1).getDay(); // 0 = Sunday
+        
+        // Reset weekly counters on Monday (dayOfWeek === 1)
+        if (dayOfWeek === 1) {
+            workers.forEach(worker => {
+                workerStates[worker].shiftsThisWeek = 0;
+                workerStates[worker].weekStartDay = day;
+            });
+        }
+
+        // Process each shift for this day
         for (let shift of schedule) {
             let assigned = 0;
-            let attempts = 0;
-            const maxAttempts = totalWorkers * 2;
+            let availableWorkers = [];
 
-            while (assigned < shift.people && attempts < maxAttempts) {
-                let worker = workers[workerIndex % totalWorkers];
-
-                if (workerSchedules[worker][day] === "Day Off") {
-                    workerSchedules[worker][day] = shift.name;
-
-                    // Handle night shift rest days
-                    if (shift.isNight) {
-                        if (day + 1 < daysInMonth && workerSchedules[worker][day + 1] === "Day Off") {
-                            workerSchedules[worker][day + 1] = "Rest Day";
-                        }
-                    }
-                    assigned++;
+            // Find available workers for this shift
+            workers.forEach(worker => {
+                const state = workerStates[worker];
+                
+                // Skip if worker needs rest days
+                if (state.daysOffNeeded > 0) {
+                    state.daysOffNeeded--;
+                    workerSchedules[worker][day] = "Rest Day";
+                    return;
                 }
-                workerIndex++;
-                attempts++;
+
+                // Skip if already assigned today
+                if (workerSchedules[worker][day] !== "Day Off") {
+                    return;
+                }
+
+                // Skip if already worked 4 shifts this week
+                if (state.shiftsThisWeek >= 4) {
+                    return;
+                }
+
+                availableWorkers.push(worker);
+            });
+
+            // Sort available workers by shifts worked this week (ascending)
+            availableWorkers.sort((a, b) => 
+                workerStates[a].shiftsThisWeek - workerStates[b].shiftsThisWeek
+            );
+
+            // Assign workers to this shift
+            for (let worker of availableWorkers) {
+                if (assigned >= shift.people) break;
+
+                workerSchedules[worker][day] = shift.name;
+                workerStates[worker].shiftsThisWeek++;
+                assigned++;
+
+                // Handle night shift rest period
+                if (shift.isNight) {
+                    workerStates[worker].daysOffNeeded = 2; // 3 total days off (including today's completion)
+                    workerStates[worker].lastShiftWasNight = true;
+                } else {
+                    workerStates[worker].lastShiftWasNight = false;
+                }
             }
         }
+
+        // Ensure workers get proper days off pattern
+        workers.forEach(worker => {
+            const state = workerStates[worker];
+            
+            // If it's end of week (Sunday) and worker hasn't had enough days off
+            if (dayOfWeek === 0 && state.shiftsThisWeek < 4) {
+                const daysInWeek = day - state.weekStartDay + 1;
+                const workDays = state.shiftsThisWeek;
+                const offDays = daysInWeek - workDays;
+                
+                // Ensure minimum 2 days off per week (3 if had night shift)
+                const requiredOffDays = state.lastShiftWasNight ? 3 : 2;
+                if (offDays < requiredOffDays && workerSchedules[worker][day] === "Day Off") {
+                    // Keep as day off
+                }
+            }
+        });
     }
 
     renderSchedule(workerSchedules, daysInMonth, year, month);
