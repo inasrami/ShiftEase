@@ -1,0 +1,16 @@
+{
+  "name": "shiftease",
+  "version": "1.0.0",
+  "description": "Ultimate Shift Generator Solution",
+  "main": "ShiftEase.html",
+  "scripts": {
+    "start": "npx serve .",
+    "dev": "npx serve ."
+  },
+  "keywords": ["shift", "schedule", "generator", "work", "planning"],
+  "author": "",
+  "license": "MIT",
+  "devDependencies": {
+    "serve": "^14.2.1"
+  }
+}
