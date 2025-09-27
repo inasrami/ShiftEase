@@ -458,6 +458,11 @@ select:focus {
     color: white !important;
     font-weight: 500;
 }
+.afternoon {
+    background: #3b82f6 !important;
+    color: white !important;
+    font-weight: 500;
+}
 .export{
     margin-top: 1rem;
     background: white;
@@ -510,3 +515,20 @@ select:focus {
 .table-container::-webkit-scrollbar-thumb:hover {
     background: #475569;
 }
+
+.shift-morning {
+    background: #fde68a !important; 
+    color: #92400e !important;
+    font-weight: 500;
+}
+.shift-afternoon {
+    background: #cdba70 !important; 
+    color: #92400e !important;
+    font-weight: 500;
+}
+.shift-night {
+    background: #90834f !important; 
+    color: #fbfbfb !important;
+    font-weight: 500;
+}
+

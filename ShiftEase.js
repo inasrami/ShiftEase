@@ -304,18 +304,9 @@ function renderSchedule(schedules, daysInMonth, year, month) {
     schedules[worker].forEach((shift, dayIdx) => {
         let cellClass = '';
         if (shift === "Day Off" || shift === "Rest Day" || shift === "Day off") {
-           
-            if (
-                dayIdx > 0 &&
-                schedules[worker][dayIdx - 1] &&
-                schedules[worker][dayIdx - 1].toLowerCase().includes("night")
-            ) {
-                cellClass = 'off-night';
-            } else {
-                cellClass = 'off';
-            }
-        } else if (shift.toLowerCase().includes("night")) {
-            cellClass = 'night';
+            cellClass = 'off';
+        } else {
+            cellClass = 'shift-' + shift.toLowerCase().replace(/\s+/g, '-');
         }
         html += `<td class="${cellClass}">${shift}</td>`;
     });
