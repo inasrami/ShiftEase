@@ -1,6 +1,6 @@
 let workers = [];
 
-// Add worker with enhanced UI feedback
+
 function addWorker() {
     let input = document.getElementById('workerName');
     let name = input.value.trim();
@@ -20,13 +20,13 @@ function addWorker() {
     }
 }
 
-// Enhanced worker list rendering
+
 function renderWorkers() {
     let list = document.getElementById('workerList');
     list.innerHTML = '';
     
     if (workers.length === 0) {
-        return; // CSS handles empty state
+        return; 
     }
     
     workers.forEach((worker, index) => {
@@ -44,7 +44,6 @@ function renderWorkers() {
     });
 }
 
-// Remove worker with confirmation
 function removeWorker(index) {
     const workerName = workers[index];
     if (confirm(`Are you sure you want to remove ${workerName}?`)) {
@@ -54,7 +53,6 @@ function removeWorker(index) {
     }
 }
 
-// Enhanced shift rendering with better UI
 function renderShifts() {
     let shiftCount = parseInt(document.getElementById('shift').value);
     let container = document.getElementById('shiftsContainer');
@@ -64,7 +62,7 @@ function renderShifts() {
         { name: 'Morning', start: '08:00', end: '16:00' },
         { name: 'Afternoon', start: '16:00', end: '00:00' },
         { name: 'Night', start: '00:00', end: '08:00' },
-        { name: 'Late Night', start: '22:00', end: '06:00' }
+        
     ];
 
     for (let i = 0; i < shiftCount; i++) {
@@ -98,9 +96,7 @@ function renderShifts() {
     }
 }
 
-// Enhanced schedule generation with better error handling
 function generateSchedule() {
-    // Validation
     if (workers.length === 0) {
         showNotification('Please add at least one worker before generating schedule', 'error');
         return;
@@ -115,7 +111,7 @@ function generateSchedule() {
         Generating...
     `;
 
-    // Simulate processing time for better UX
+ 
     setTimeout(() => {
         try {
             performScheduleGeneration();
@@ -136,7 +132,6 @@ function generateSchedule() {
 }
 
 function performScheduleGeneration() {
-    // Get month and year from input
     let input = document.getElementById("monthPicker").value;
     let year, month;
 
@@ -148,12 +143,10 @@ function performScheduleGeneration() {
         month = today.getMonth() + 1;
     }
 
-    // Days in selected month
     let daysInMonth = new Date(year, month, 0).getDate();
     let shifts = parseInt(document.getElementById('shift').value);
     let schedule = [];
 
-    // Collect shift information
     for (let i = 0; i < shifts; i++) {
         const shiftName = document.getElementById(`shift${i}Label`).value || `Shift ${i + 1}`;
         const peopleRequired = parseInt(document.getElementById(`shift${i}People`).value) || 1;
@@ -167,13 +160,11 @@ function performScheduleGeneration() {
         });
     }
 
-    // Initialize worker schedules
     let workerSchedules = {};
     workers.forEach(worker => {
         workerSchedules[worker] = Array(daysInMonth).fill("Day Off");
     });
 
-    // Track worker monthly and weekly states
     let workerMonthlyStats = {};
     let workerWeeklyStats = {};
     workers.forEach(worker => {
@@ -190,12 +181,10 @@ function performScheduleGeneration() {
 
     const TARGET_SHIFTS_PER_PERSON = 21;
 
-    // Process each day of the month
     for (let day = 0; day < daysInMonth; day++) {
         const currentDate = new Date(year, month - 1, day + 1);
-        const dayOfWeek = currentDate.getDay(); // 0 = Sunday, 1 = Monday, etc.
+        const dayOfWeek = currentDate.getDay(); 
         
-        // Reset weekly counters on Monday
         if (dayOfWeek === 1) {
             workers.forEach(worker => {
                 workerWeeklyStats[worker].shiftsThisWeek = 0;
@@ -203,61 +192,57 @@ function performScheduleGeneration() {
             });
         }
 
-        // Handle mandatory rest days after night shifts
         workers.forEach(worker => {
-            if (workerWeeklyStats[worker].restDaysNeeded > 0) {
-                workerSchedules[worker][day] = "Rest Day";
+            if (
+                workerSchedules[worker][day] === "Day Off" ||
+                workerSchedules[worker][day] === "Rest Day" ||
+                workerSchedules[worker][day] === "Day off"
+            ) {
+            } else if (workerWeeklyStats[worker].restDaysNeeded > 0) {
+                workerSchedules[worker][day] = "Day off";
                 workerWeeklyStats[worker].restDaysNeeded--;
                 workerWeeklyStats[worker].daysOffThisWeek++;
             }
         });
 
-        // Assign shifts for this day
         for (let shift of schedule) {
             let assignedCount = 0;
             let availableWorkers = [];
 
-            // Find workers available for this shift
             workers.forEach(worker => {
                 const weeklyStats = workerWeeklyStats[worker];
                 const monthlyStats = workerMonthlyStats[worker];
                 
-                // Skip if already assigned today
                 if (workerSchedules[worker][day] !== "Day Off") {
                     return;
                 }
                 
-                // Skip if already worked 4 shifts this week (weekly limit)
                 if (weeklyStats.shiftsThisWeek >= 4) {
                     return;
                 }
                 
-                // Skip if already reached monthly target of 21 shifts
                 if (monthlyStats.totalShifts >= TARGET_SHIFTS_PER_PERSON) {
                     return;
                 }
                 
-                // Check if worker can maintain weekly pattern (4 shifts, 2-3 days off)
                 const totalDaysThisWeek = weeklyStats.shiftsThisWeek + weeklyStats.daysOffThisWeek;
                 const remainingDaysInWeek = 7 - totalDaysThisWeek;
-                const requiredDaysOff = 2; // Base requirement, will be adjusted for night shifts
+                const requiredDaysOff = 2; 
                 const remainingDaysOffNeeded = requiredDaysOff - weeklyStats.daysOffThisWeek;
                 
                 if (remainingDaysOffNeeded > remainingDaysInWeek - 1) {
-                    return; // Need to preserve days for required days off
+                    return; 
                 }
 
                 availableWorkers.push(worker);
             });
 
-            // Sort by priority: fewest monthly shifts first, then fewest weekly shifts
             availableWorkers.sort((a, b) => {
                 const monthlyDiff = workerMonthlyStats[a].totalShifts - workerMonthlyStats[b].totalShifts;
                 if (monthlyDiff !== 0) return monthlyDiff;
                 return workerWeeklyStats[a].shiftsThisWeek - workerWeeklyStats[b].shiftsThisWeek;
             });
 
-            // Assign workers to this shift
             for (let worker of availableWorkers) {
                 if (assignedCount >= shift.people) break;
 
@@ -266,15 +251,13 @@ function performScheduleGeneration() {
                 workerMonthlyStats[worker].totalShifts++;
                 assignedCount++;
 
-                // If this is a night shift, schedule additional rest days
                 if (shift.isNight) {
-                    workerWeeklyStats[worker].restDaysNeeded = 2; // 2 extra days (total 3 days off)
+                    workerWeeklyStats[worker].restDaysNeeded = 2; 
                     workerMonthlyStats[worker].nightShifts++;
                 }
             }
         }
 
-        // Count days off for workers not assigned
         workers.forEach(worker => {
             if (workerSchedules[worker][day] === "Day Off" || workerSchedules[worker][day] === "Rest Day") {
                 workerWeeklyStats[worker].daysOffThisWeek++;
@@ -282,7 +265,6 @@ function performScheduleGeneration() {
         });
     }
 
-    // Display monthly statistics
     console.log("Monthly Shift Distribution:");
     workers.forEach(worker => {
         const stats = workerMonthlyStats[worker];
@@ -291,7 +273,6 @@ function performScheduleGeneration() {
     renderSchedule(workerSchedules, daysInMonth, year, month);
 }
 
-// Enhanced schedule rendering with better styling
 function renderSchedule(schedules, daysInMonth, year, month) {
     let output = document.getElementById('scheduleOutput');
     
@@ -308,10 +289,9 @@ function renderSchedule(schedules, daysInMonth, year, month) {
             <table id="tableSchedule">
                 <thead>
                     <tr>
-                        <th>Worker</th>
+                        <th style="text-align:center;">Worker</th>
     `;
 
-    // Add day headers
     for (let d = 1; d <= daysInMonth; d++) {
         const date = new Date(year, month - 1, d);
         const dayName = date.toLocaleDateString('en-US', { weekday: 'short' });
@@ -319,19 +299,28 @@ function renderSchedule(schedules, daysInMonth, year, month) {
     }
     html += `</tr></thead><tbody>`;
 
-    // Add worker rows
     for (let worker in schedules) {
-        html += `<tr><td><strong>${worker}</strong></td>`;
-        schedules[worker].forEach(shift => {
-            let cellClass = '';
-            if (shift === "Day Off" || shift === "Rest Day") {
+    html += `<tr><td><strong>${worker}</strong></td>`;
+    schedules[worker].forEach((shift, dayIdx) => {
+        let cellClass = '';
+        if (shift === "Day Off" || shift === "Rest Day" || shift === "Day off") {
+           
+            if (
+                dayIdx > 0 &&
+                schedules[worker][dayIdx - 1] &&
+                schedules[worker][dayIdx - 1].toLowerCase().includes("night")
+            ) {
+                cellClass = 'off-night';
+            } else {
                 cellClass = 'off';
-            } else if (shift.toLowerCase().includes("night")) {
-                cellClass = 'night';
             }
-            html += `<td class="${cellClass}">${shift}</td>`;
-        });
-        html += `</tr>`;
+        } else if (shift.toLowerCase().includes("night")) {
+            cellClass = 'night';
+        }
+        html += `<td class="${cellClass}">${shift}</td>`;
+    });
+    html += `</tr>`;
+
     }
 
     html += `</tbody></table></div>`;
@@ -339,9 +328,7 @@ function renderSchedule(schedules, daysInMonth, year, month) {
     output.classList.add('fade-in');
 }
 
-// Notification system
 function showNotification(message, type = 'info') {
-    // Remove existing notifications
     const existingNotifications = document.querySelectorAll('.notification');
     existingNotifications.forEach(notification => notification.remove());
 
@@ -361,7 +348,6 @@ function showNotification(message, type = 'info') {
         box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
     `;
 
-    // Set background color based on type
     const colors = {
         success: '#10b981',
         error: '#ef4444',
@@ -373,14 +359,12 @@ function showNotification(message, type = 'info') {
     notification.textContent = message;
     document.body.appendChild(notification);
 
-    // Auto remove after 3 seconds
     setTimeout(() => {
         notification.style.animation = 'slideOut 0.3s ease-in forwards';
         setTimeout(() => notification.remove(), 300);
     }, 3000);
 }
 
-// Add CSS for notifications
 const notificationStyles = document.createElement('style');
 notificationStyles.textContent = `
     @keyframes slideIn {
@@ -420,19 +404,39 @@ notificationStyles.textContent = `
 `;
 document.head.appendChild(notificationStyles);
 
-// Enhanced keyboard support
 document.getElementById('workerName').addEventListener('keypress', function(e) {
     if (e.key === 'Enter') {
         addWorker();
     }
 });
 
-// Initialize default shifts on page load
 document.addEventListener('DOMContentLoaded', function() {
     renderShifts();
     
-    // Set current month as default
     const today = new Date();
     const currentMonth = today.toISOString().slice(0, 7);
     document.getElementById('monthPicker').value = currentMonth;
 });
+
+function exportScheduleToExcel() {
+    const table = document.getElementById('tableSchedule');
+    if (!table) {
+        showNotification('No schedule table found to export!', 'error');
+        return;
+    }
+    const data = [];
+    for (let row of table.rows) {
+        const rowData = [];
+        for (let cell of row.cells) {
+            rowData.push(cell.textContent);
+        }
+        data.push(rowData);
+    }
+    
+    const worksheet = XLSX.utils.aoa_to_sheet(data);
+    
+    const workbook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(workbook, worksheet, 'Schedule');
+   
+    XLSX.writeFile(workbook, 'schedule.xlsx');
+}

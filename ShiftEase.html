@@ -9,23 +9,17 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 </head>
 <body>
-    <!-- Header Section -->
     <div class="header">
         <h1>ShiftEase</h1>
         <p class="subtitle">Your Ultimate Shift Generator Solution</p>
     </div>
 
-    <!-- Main Container -->
     <div class="container">
-        <!-- Workers and Shifts Configuration -->
         <div class="card-grid">
-            <!-- Workers Section -->
             <div class="card">
                 <div class="card-header">
                     <h2 class="card-title">
-                        <svg class="icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197m13.5-9a2.5 2.5 0 11-5 0 2.5 2.5 0 015 0z"></path>
-                        </svg>
+                        
                         Team Members
                     </h2>
                     <p class="card-description">Add and manage your team members who will be assigned to shifts</p>
@@ -49,13 +43,10 @@
                 <div class="worker-list" id="workerList"></div>
             </div>
 
-            <!-- Shifts Configuration Section -->
             <div class="card">
                 <div class="card-header">
                     <h2 class="card-title">
-                        <svg class="icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                        </svg>
+                        
                         Shift Configuration
                     </h2>
                     <p class="card-description">Configure the number of shifts and their details</p>
@@ -67,7 +58,7 @@
                         <option value="1">1 Shift</option>
                         <option value="2">2 Shifts</option>
                         <option value="3">3 Shifts</option>
-                        <option value="4">4 Shifts</option>
+                        
                     </select>
                 </div>
 
@@ -75,13 +66,10 @@
             </div>
         </div>
 
-        <!-- Schedule Generation Section -->
         <div class="card-full">
             <div class="card-header">
                 <h2 class="card-title">
-                    <svg class="icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
-                    </svg>
+                    
                     Generate Schedule
                 </h2>
                 <p class="card-description">Select the month and generate your optimized shift schedule</p>
@@ -101,8 +89,23 @@
 
             <div class="schedule-output" id="scheduleOutput"></div>
         </div>
+        <button onclick="exportScheduleToExcel()" class="export">
+            <svg width="20" height="20" viewBox="0 0 24 24" style="margin-right: 0.5rem;">
+                <g>
+                    <rect width="24" height="24" fill="none"/>
+                    <path d="M12 16v-8" stroke="black" stroke-width="2" stroke-linecap="round"/>
+                    <path d="M12 16l-4-4" stroke="black" stroke-width="2" stroke-linecap="round"/>
+                    <path d="M12 16l4-4" stroke="black" stroke-width="2" stroke-linecap="round"/>
+                    <path d="M4 20h16" stroke="black" stroke-width="2" stroke-linecap="round"/>
+                </g>
+            </svg>
+            Export to Excel
+        </button>
     </div>
 
+    
+
     <script src="ShiftEase.js"></script>
+    <script src="https://cdn.sheetjs.com/xlsx-latest/package/dist/xlsx.full.min.js"></script>
 </body>
 </html>
